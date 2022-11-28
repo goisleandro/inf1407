@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style type="text/css">
+
+	@media (max-width: 768px) { 
+		.right-column{
+			margin-left: 0px;
+		}
+	}
+
+	@media (min-width: 768px) { 
+		.right-column{
+			margin-left: 20px;
+		}
+	}
+
+	.blog-post-container{
+		margin-bottom: 20px;
+		width: 100%;
+	}
+	.create-post-bar{
+		background-color: #fff;
+		margin-bottom:20px;
+	}
+
+	.left-column{
+		padding:0px;
+	}
+
+	.right-column{
+		padding:0px;
+	}
+	.lead{
+		font-size: 17px;
+	}
+</style>
+
+
+<!-- conteúdo main -->
+<div class="container">
+	<div class="row">
+
+		<!-- feed do Blog -->
+		<div class="left-column col-lg-7 offset-lg-1">
+
+			<!-- 'criar postagem' -->
+			<div class="d-lg-none mb-3">
+				<div class="card m-auto d-flex flex-column p-3">
+					<img class="img-fluid d-block m-auto pb-2" src="{% static 'django-logo.png' %}" width="72" height="72">
+					<p class="lead">Este site é o equivalente ao Blogspot, só que piorado. É um Blog feito em Django.
+                        Realiza CRUD de usuários e CRUD de postagens... Aproveite!</p>
+					<p class="m-auto"><a class="btn btn-primary" href="{% url 'postagens:cria' %}">Criar Postagem</a></p>
+				</div>
+			</div>
+			<!-- end 'criar postagem' -->
+
+			<!-- Postagens do Blog -->
+			{% if postagem_blog %}
+				{% for postagem in postagem_blog %}
+					<div class="blog-post-container">
+						{% include 'postagens/snippets/blog-snippet.html' with postagem_blog=postagem %}
+					</div>
+				{% endfor %}
+			{% else %}
+				<div class="blog-post-container">
+					{% include 'postagens/snippets/blog-snippet.html' with query=query %}
+				</div>
+			{% endif %}
+			<!-- End Postagens do Blog-->
+
+		</div>
+		<!-- end blog feed -->
+
+
+		<!-- 'criar postagem' coluna direita -->
+		<div class="right-column col-lg-3 d-lg-flex d-none flex-column">
+
+			<div class="card create-post-bar d-flex flex-column p-3">
+				<img class="img-fluid d-block m-auto pb-2" src="{% static 'django-logo.png' %}" width="72" height="72">
+				<p class="lead">Este site é o equivalente ao Blogspot, só que piorado. É um Blog feito em Django.
+                    Realiza CRUD de usuários e CRUD de postagens... Aproveite!</p>
+				<p class="m-auto"><a class="btn btn-primary" href="{% url 'postagens:cria' %}">Criar Postagem</a></p>
+			</div>
+		
+		</div>
+		<!-- end 'criar postagem' coluna direita -->
+
+
+
+	</div>
+</div>
+
+{% endblock content %}

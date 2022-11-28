@@ -1,0 +1,28 @@
+{% extends 'base.html' %} {% block content %}
+
+<style type="text/css">
+    .card {
+        max-width: 700px;
+    }
+    
+    .container {
+        padding: 20px;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <!-- Postagem do Blog -->
+        <div class="card m-auto">
+            <div class="card-body my-2">
+                <p>Postagem apagada com sucesso.</p>
+            </div>
+            <div class="card-footer text-muted">
+                Atualizado em {{postagem_blog.data_atualizacao}} por {{postagem_blog.autor}}
+            </div>
+        </div>
+        <!-- end Postagem do Blog -->
+    </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+    <style type="text/css">
+        .form-signin {
+        width: 100%;
+        max-width: 330px;
+        padding: 15px;
+        align-items: center;
+        padding-top: 40px;
+        padding-bottom: 40px;
+        background-color: #f5f5f5;
+        }
+
+        .form-signin .form-floating:focus-within {
+        z-index: 2;
+        }
+
+        .form-signin input[type="email"] {
+        margin-bottom: 10px;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+        }
+
+        .form-signin input[type="text"] {
+        margin-bottom: 10px;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+        }
+
+        .form-signin input[type="password"] {
+        margin-bottom: 10px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        }
+
+        input::placeholder {
+        color: red;
+        }
+
+        .h3{
+            text-align: center;
+        }
+
+    </style>
+
+    <form class="form-signin w-100 m-auto" method="post">{% csrf_token %}
+        <div class="d-flex flex-column pb-3">
+            <img class="img-fluid mx-auto d-block" src="{% static 'django-logo.png' %}" alt="RD logo" width="100" height="100">
+        </div>
+        
+        <h1 class="h3 mb-3 fw-normal">Criar uma Conta</h1>
+
+        <div class="form-floating">
+            <input  type="email" name="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+            <label for="floatingInput">Email</label>
+        </div>
+
+        <div class="form-floating">
+            <input type="text" name="username" class="form-control" id="floatingUsername" placeholder="Username">
+            <label for="floatingInput">Username</label>
+        </div>
+
+        <div class="form-floating">
+            <input type="password" name="password1" class="form-control" id="floatingPassword1" placeholder="Senha">
+            <label for="floatingInput">Senha</label>
+        </div>
+
+        <div class="form-floating">
+            <input type="password" name="password2" class="form-control" id="floatingPassword2" placeholder="Confirmar Senha">
+            <label for="floatingInput">Confirmar Senha</label>
+        </div>
+
+        {% for field in registro_form %}
+            <p>
+                <!--trata erros de formulário (ex: não preencheu campo do login, número mínimo de caracteres da senha não foi escrito)-->
+                {% for error in field.errors %}
+                    <p style="color: red;">{{error}}</p>
+                {% endfor %}
+            </p>
+        {% endfor %}
+
+        <!--trata erros no preenchimento dos formulários (ex: senha errada, login inválido)-->
+        {% if registro_form.non_field_errors %}
+            <div style="color: red;">
+                <p>{{registro_form.non_field_errors}}</p>
+            </div>
+        {% endif %}
+
+        <button class="w-100 btn btn-lg btn-primary" type="submit">Criar Conta!</button>
+    </form>
+
+{% endblock content %}

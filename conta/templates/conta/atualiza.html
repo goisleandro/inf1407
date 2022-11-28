@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <style type="text/css">
+        .form-signin {
+        width: 100%;
+        max-width: 330px;
+        padding: 15px;
+        align-items: center;
+        padding-top: 40px;
+        padding-bottom: 40px;
+        background-color: #f5f5f5;
+        }
+
+        .form-signin .form-floating:focus-within {
+        z-index: 2;
+        }
+
+        .form-signin input[type="email"] {
+        margin-bottom: -1px;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+        }
+
+        .form-signin input[type="text"] {
+        margin-bottom: 10px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        }
+
+        .h3{
+            text-align: center;
+        }
+
+        .postagens_blog{
+            max-width: 500px;
+            width: 100%;
+            margin: auto;
+        }
+
+    </style>
+
+    <form class="form-signin w-100 m-auto" method="post">{% csrf_token %}
+        <h1 class="h3 mb-3 fw-normal">Dados da Conta</h1>
+
+        <div class="form-floating">
+            <input  type="email" name="email" class="form-control" id="floatingInput" placeholder="name@example.com" value={{conta_form.initial.email}}>
+            <label for="floatingInput">Email</label>
+        </div>
+
+        <div class="form-floating">
+            <input type="text" name="username" class="form-control" id="floatingUsername" placeholder="Username" value={{conta_form.initial.username}}>
+            <label for="floatingInput">Username</label>
+        </div>
+
+        {% for field in conta_form %}
+            <p>
+                <!--trata erros de formulário (ex: não preencheu campo do login, número mínimo de caracteres da senha não foi escrito)-->
+                {% for error in field.errors %}
+                    <p style="color: red;">{{error}}</p>
+                {% endfor %}
+            </p>
+        {% endfor %}
+
+        <!--trata erros no preenchimento dos formulários (ex: senha errada, login inválido)-->
+        {% if conta_form.non_field_errors %}
+            <div style="color: red;">
+                <p>{{conta_form.non_field_errors}}</p>
+            </div>
+        {% endif %}
+
+        {% if msg_sucesso %}
+            <p style="color: green; text-align:center;">{{msg_sucesso}}</p>
+        {% endif %}
+
+        <button class="w-100 btn btn-lg btn-primary" type="submit">Salvar alterações</button>
+    </form>
+
+    <div class="d-flex flex-column">
+        <a class="m-auto" href="{% url 'password_change' %}">Trocar Senha</a>
+    </div>
+
+    <div class="container mt-4 p-4">
+        <div class="row">
+            <div class="postagens_blog">
+                <h3 class="mb-3 font-weight-normal">Postagens do Blog:</h3>
+                {% if postagens_blog %}
+                    <ul>
+                        {% for post in postagens_blog %}
+                            <a href="{% url 'postagens:detalhe' post.slug %}" style="text-decoration: none;">
+                                <li class="list-group-item">{{post}}</li>
+                            </a>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                <p>Você não tem postagens ainda! Faça sua primeira postagem <a href="{% url 'postagens:cria' %}">aqui</a>!</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+{% endblock content %}

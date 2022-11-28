@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+    <div class="d-flex flex-column">
+        <p class="m-auto">Você precisa logar para ver esta página</p>
+        <p class="m-auto">
+            <a href="{% url 'tela-registro' %}">Crie uma Conta</a> ou
+            <a href="{% url 'tela-login' %}">Entre</a>
+        </p>
+    </div>
+</div>
+
+{% endblock content %}

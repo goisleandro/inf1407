@@ -1,0 +1,82 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<style type="text/css">
+    .create-form {
+        width: 100%;
+        max-width: 100%;
+        padding: 15px;
+        margin: auto;
+    }
+    
+    .submit-button {
+        max-width: 200px;
+    }
+</style>
+<script type="text/javascript">
+    onload = function() {
+        document.getElementById('id_title').addEventListener('keyup', function(e) {
+            // recupera o campo usern ame do formu lário
+            var titulo = document.getElementById('id_title');
+            console.log(' Mudou ', titulo.value);
+            // cria o obj eto HTTP Req uest
+            var xmlhttp = new XMLHttpRequest();
+            // Abre a con exão
+            xmlhttp.open("GET", "{% url 'verificaTitulo' %}?titulo=" +
+                encodeURIComponent(titulo.value), true);
+            // Função de callback
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.status == 200 && xmlhttp.readyState == 4) {
+                    var resposta = JSON.parse(xmlhttp.responseText);
+                    console.log("Resposta = " + resposta.existe);
+                    if (resposta.existe) {
+                        titulo.style = "border: 4px solid #FF0000";
+                        document.getElementById('idMsgErro').replaceChild(
+                            document.createTextNode("Titulo já existe"),
+                            document.getElementById('idMsgErro').firstChild);
+                    } else {
+                        titulo.style = "border: 4px solid #00FF00";
+                        document.getElementById('idMsgErro').replaceChild(
+                            document.createTextNode("OK"),
+                            document.getElementById('idMsgErro').firstChild);
+                    }
+                }
+            };
+            // Envia o Request
+            xmlhttp.send(null);
+        });
+    }
+</script>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-7 offset-lg-1">
+            <form class="create-form" method="post" enctype="multipart/form-data">{% csrf_token %}
+
+                <!-- title -->
+                <div class="form-group">
+                    <label for="id_title">Título</label>
+                    <input class="form-control" type="text" name="titulo" id="id_title" placeholder="Título" required autofocus>
+                </div>
+
+                <!-- Body -->
+                <div class="form-group">
+                    <label for="id_body">Conteúdo</label>
+                    <textarea class="form-control" rows="10" type="text" name="corpo" id="id_body" placeholder="Esta postagem é sobre..." required></textarea>
+                </div>
+
+                <!-- Image -->
+                <div class="form-group">
+                    <label for="id_image">Imagem</label>
+                    <input type="file" name="imagem" id="id_image" accept="image/*" required>
+                </div>
+
+                <!-- Submit btn -->
+                <button class="submit-button btn btn-lg btn-primary btn-block" type="submit">POSTAR!</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock content %}

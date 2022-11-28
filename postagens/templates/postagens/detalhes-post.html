@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <style type="text/css">
+        .card{
+            max-width: 700px;
+        }
+
+        .container{
+            padding: 20px;
+        }
+    </style>
+
+    <div class="container">
+        <div class="row">
+            <!-- Postagem do Blog -->
+            <div class="card m-auto">
+                <img class="card-img-top" src="{{postagem_blog.imagem.url}}">
+                <div class="card-body my-2">
+                    <h2 class="card-title">{{postagem_blog.titulo}}</h2>
+                    <p class="card-text">{{postagem_blog.corpo|safe}}</p>
+                    {% if postagem_blog.autor == request.user %}
+                        <a href="{% url 'postagens:edita' postagem_blog.slug %}" class="btn btn-primary">Atualizar</a>
+                    {% endif %}
+                </div>
+                <div class="card-footer text-muted">
+                    Atualizado em {{postagem_blog.data_atualizacao}} por {{postagem_blog.autor}}
+                </div>
+            </div>
+            <!-- end Postagem do Blog -->
+        </div>
+    </div>
+
+{% endblock content %}
