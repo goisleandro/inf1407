@@ -1,7 +1,7 @@
-"""inf1407 URL Configuration
+"""Blog URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.0/topics/http/urls/
+    https://docs.djangoproject.com/en/4.1/topics/http/urls/
 Examples:
 Function views
     1. Add an import:  from my_app import views
@@ -15,9 +15,53 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.static import static
+from django.conf import settings
+from django.contrib.auth import views as auth_views
+from django.urls.base import reverse_lazy
+
+from conta.views import (
+    tela_inicial_view,
+    registro_view,
+    logout_view,
+    login_view,
+    atualiza_view,
+    precisa_autenticar_view,
+    verifica_titulo,
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('Blog.urls')),
-    #path('', include('Blog.urls')),
+    path('', tela_inicial_view, name="tela-inicial"),
+    path('postagens/', include('postagens.urls', 'postagens')),
+    path('registro/', registro_view, name="tela-registro"),
+    path('logout/', logout_view, name="tela-logout"),
+    path('login/', login_view, name="tela-login"),
+    path('atualiza/', atualiza_view, name="tela-atualiza"),
+    path('precisa-autenticar/', precisa_autenticar_view, name="tela-precisa-autenticar"),
+    path('verificaTitulo/', verifica_titulo,name='verificaTitulo'),
+
+    #links de redefinição de senha padrão do Django
+    path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(
+        template_name="registration/password_change_done.html"),
+        name="password_change_done"),
+    path('password_change/', auth_views.PasswordChangeView.as_view(
+        template_name="registration/password_change.html"),
+        name="password_change"),
+    path('password_reset/done/', auth_views.PasswordResetCompleteView.as_view(
+        template_name="registration/password_reset_done.html"),
+        name="password_reset_done"),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(
+        template_name="registration/password_change.html",
+        success_url=reverse_lazy('password_reset_complete'),),  
+        name="password_reset_confirm"),
+    path('password_reset/', auth_views.PasswordResetView.as_view(),
+        name="password_reset"),
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(
+        template_name="registration/password_reset_complete.html"),
+        name="password_reset_complete"),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -26,7 +26,17 @@ SECRET_KEY = 'django-insecure-@-wil$n&8u@hh%qf6bu(j(rqce(qbefqrc+qwlxitb0$u1a93*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['goisleandro.pythonanywhere.com', '127.0.0.1']
+ALLOWED_HOSTS = ['goisleandro.pythonanywhere.com', 'http://127.0.0.1:8000/']
+
+#if DEBUG:
+    #apenas durante desenvolvimento
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'lgsgweb@gmail.com'
+EMAIL_HOST_PASSWORD = 'diaobzehxhsrcjfp'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'recuperacao.senha@gmail.com'
 
 # Application definition
 
@@ -37,6 +47,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #apps incluídos
+    'conta',
+    'postagens',
 ]
 
 MIDDLEWARE = [
@@ -54,7 +67,7 @@ ROOT_URLCONF = 'inf1407.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -66,6 +79,8 @@ TEMPLATES = [
         },
     },
 ]
+
+AUTH_USER_MODEL = "conta.Conta"
 
 WSGI_APPLICATION = 'inf1407.wsgi.application'
 
@@ -115,7 +130,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static', 'static2')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media2')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
